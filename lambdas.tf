@@ -21,12 +21,6 @@ resource "aws_lambda_function" "this" {
   timeout     = 3
   memory_size = 128
 
-  lifecycle {
-    ignore_changes = [
-      runtime,
-      handler
-    ]
-  }
 
   environment {
     variables = {
