@@ -29,4 +29,11 @@ resource "aws_lambda_function" "this" {
       handler
     ]
   }
+
+  environment {
+    variables = {
+      S3_BUCKET_NAME = aws_s3_bucket.ingestion_prod.bucket
+      ENVIRONMENT = var.environment
+    }
+  }
 }
