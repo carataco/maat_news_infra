@@ -18,8 +18,11 @@ resource "aws_iam_role_policy" "lambda_s3_access" {
           "s3:ListBucket"
         ]
         Resource = [
-          aws_s3_bucket.ingestion_dev.arn,           # bucket itself for ListBucket
-          "${aws_s3_bucket.ingestion_dev.arn}/*"    # all objects in the bucket
+          aws_s3_bucket.ingestion_dev.arn,         
+          "${aws_s3_bucket.ingestion_dev.arn}/*",
+
+          aws_s3_bucket.ingestion_prod.arn,
+          "${aws_s3_bucket.ingestion_prod.arn}/*"
         ]
       }
     ]

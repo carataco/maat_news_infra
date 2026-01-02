@@ -6,3 +6,12 @@ resource "aws_s3_bucket" "ingestion_dev" {
     Env     = "dev"
   }
 }
+
+resource "aws_s3_bucket" "ingestion_prod" {
+  bucket = "raw-maat-news-prod"
+
+  tags = {
+    Project = "Maat News"
+    Env     = "prod"
+  }
+}
