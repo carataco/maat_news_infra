@@ -12,7 +12,7 @@ terraform {
     bucket         = "terraform-maat-news"
     key            = "terraform.tfstate"
     region         = "eu-south-2"
-    dynamodb_table = "terraform-locks"
+    use_lockfile   = true
     encrypt        = true
   }
 }
