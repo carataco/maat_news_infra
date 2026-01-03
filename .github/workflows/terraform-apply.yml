@@ -30,14 +30,6 @@ jobs:
           terraform_version: 1.6.6
           terraform_wrapper: false
 
-      # Create the dummy Lambda zip for placeholder Lambda
-      - name: Create dummy Lambda zip
-        run: |
-          mkdir -p lambdas/placeholder
-          echo "def handler(event, context): return {}" > lambdas/placeholder/lambda_function.py
-          cd lambdas/placeholder
-          zip lambda_function.zip lambda_function.py
-
       - name: Terraform Init
         run: terraform init
 

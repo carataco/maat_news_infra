@@ -34,7 +34,6 @@ resource "aws_lambda_function" "this" {
   handler = "handler.lambda_handler"
   role    = aws_iam_role.lambda_exec.arn
 
-  # Bootstrap code ONLY for creation
   filename         = data.archive_file.lambda_bootstrap.output_path
   source_code_hash = data.archive_file.lambda_bootstrap.output_base64sha256
 
@@ -50,7 +49,13 @@ resource "aws_lambda_function" "this" {
   lifecycle {
     ignore_changes = [
       filename,
-      source_code_hash,
+      source_code_hash
     ]
+
+    create_before_destroy = true
+    prevent_destroy       = false
   }
+
+  
+
 }

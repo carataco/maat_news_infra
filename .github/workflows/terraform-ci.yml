@@ -33,13 +33,6 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -recursive
 
-      - name: Create dummy Lambda zip
-        run: |
-          mkdir -p lambdas/placeholder
-          echo "def handler(event, context): return {}" > lambdas/placeholder/lambda_function.py
-          cd lambdas/placeholder
-          zip lambda_function.zip lambda_function.py
-
       - name: Terraform Validate
         run: terraform validate
 
