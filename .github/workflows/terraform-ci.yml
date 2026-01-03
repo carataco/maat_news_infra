@@ -35,6 +35,15 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+        
+      - name: Show Terraform Plan
+        run: terraform show -no-color tfplan
 
       - name: Terraform Plan
-        run: terraform plan -no-color
+        run: terraform plan -out=tfplan -no-color
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan
