@@ -20,7 +20,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: .  # root folder
+        working-directory: .
 
     steps:
       - uses: actions/checkout@v4
