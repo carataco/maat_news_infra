@@ -30,6 +30,12 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Debug Terraform State
+        run: |
+          terraform workspace show
+          terraform providers lock
+          terraform state list
+          
       - name: Terraform Format
         run: terraform fmt -recursive
 
