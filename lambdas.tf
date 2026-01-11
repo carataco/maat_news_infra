@@ -56,6 +56,10 @@ resource "aws_lambda_function" "this" {
     prevent_destroy       = false
   }
 
+  layers = [
+    aws_lambda_layer_version.common.arn,
+    aws_lambda_layer_version.rss.arn
+  ]
   
 
 }
