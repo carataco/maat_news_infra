@@ -1,24 +1,34 @@
 locals {
   lambdas = {
-    ingest_bbc_news_int  = "BBC News Int RSS Ingestion"
-    ingest_the_guardian = "The Guardian RSS Ingestion"
+    ingest_bbc_news_int = {
+      description = "BBC News Int RSS Ingestion"
+      env = {
+        SOURCE_TYPE = "rss"
+        SOURCE_ID = "bbc_news_int"
+      }
+    }
+
+    ingest_the_guardian = {
+      description = "The Guardian RSS Ingestion"
+      env = {
+        SOURCE_TYPE = "rss"
+        SOURCE_ID = "the_guardian"
+      }
+    }
   }
 }
 
-# --------------------------------------------------
-# Lambda functions (infra only, Go runtime)
-# --------------------------------------------------
+
 resource "aws_lambda_function" "this" {
   for_each = local.lambdas
 
   function_name = each.key
-  description   = each.value
+  description   = each.value.description
 
   runtime = "provided.al2"
   handler = "bootstrap"
   role    = aws_iam_role.lambda_exec.arn
 
-  # --- Bootstrap code from S3 (placeholder only) ---
   s3_bucket = "terraform-maat-artifacts"
   s3_key    = "lambda_bootstrap.zip"
 
@@ -26,9 +36,12 @@ resource "aws_lambda_function" "this" {
   memory_size = 256
 
   environment {
-    variables = {
-      S3_BUCKET = aws_s3_bucket.ingestion_prod.bucket
-    }
+    variables = merge(
+      {
+        S3_BUCKET = aws_s3_bucket.ingestion_prod.bucket
+      },
+      each.value.env
+    )
   }
 
   lifecycle {
