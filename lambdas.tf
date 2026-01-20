@@ -33,6 +33,9 @@ resource "aws_lambda_function" "this" {
 
   lifecycle {
     ignore_changes = [
+      filename,
+      source_code_hash,
+      s3_bucket,
       s3_key,
       s3_object_version
     ]
