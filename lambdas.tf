@@ -6,23 +6,7 @@ locals {
 }
 
 # --------------------------------------------------
-# Bootstrap ZIP (only used to create the Lambda)
-# --------------------------------------------------
-data "archive_file" "lambda_bootstrap" {
-  type        = "zip"
-  output_path = "${path.module}/lambda_bootstrap.zip"
-
-  source {
-    filename = "handler.py"
-    content  = <<EOF
-def lambda_handler(event, context):
-    return {"status": "bootstrap"}
-EOF
-  }
-}
-
-# --------------------------------------------------
-# Lambda functions (infra only, code ignored)
+# Lambda functions (infra only, Go runtime)
 # --------------------------------------------------
 resource "aws_lambda_function" "this" {
   for_each = local.lambdas
@@ -30,12 +14,12 @@ resource "aws_lambda_function" "this" {
   function_name = each.key
   description   = each.value
 
-  runtime = "python3.10"
-  handler = "handler.lambda_handler"
+  runtime = "provided.al2"
+  handler = "bootstrap"
   role    = aws_iam_role.lambda_exec.arn
 
-  filename         = data.archive_file.lambda_bootstrap.output_path
-  source_code_hash = data.archive_file.lambda_bootstrap.output_base64sha256
+  filename         = "${path.module}/lambda_bootstrap.zip"
+  source_code_hash = filebase64sha256("${path.module}/lambda_bootstrap.zip")
 
   timeout     = 15
   memory_size = 256
@@ -55,11 +39,5 @@ resource "aws_lambda_function" "this" {
     create_before_destroy = true
     prevent_destroy       = false
   }
-
-  layers = [
-    aws_lambda_layer_version.common.arn,
-    aws_lambda_layer_version.rss.arn
-  ]
-  
 
 }
