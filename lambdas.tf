@@ -18,8 +18,9 @@ resource "aws_lambda_function" "this" {
   handler = "bootstrap"
   role    = aws_iam_role.lambda_exec.arn
 
-  filename         = "${path.module}/lambda_bootstrap.zip"
-  source_code_hash = filebase64sha256("${path.module}/lambda_bootstrap.zip")
+  # --- Bootstrap code from S3 (placeholder only) ---
+  s3_bucket = "terraform-maat-artifacts"
+  s3_key    = "lambda_bootstrap.zip"
 
   timeout     = 15
   memory_size = 256
@@ -32,12 +33,10 @@ resource "aws_lambda_function" "this" {
 
   lifecycle {
     ignore_changes = [
-      filename,
-      source_code_hash
+      s3_key,
+      s3_object_version
     ]
 
     create_before_destroy = true
-    prevent_destroy       = false
   }
-
 }
