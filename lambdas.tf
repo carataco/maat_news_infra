@@ -5,6 +5,7 @@ locals {
       env = {
         SOURCE_TYPE = "rss"
         SOURCE_ID = "bbc_news_int"
+        RSS_URL = "https://feeds.bbci.co.uk/news/rss.xml?edition=int"
       }
     }
 
@@ -13,6 +14,7 @@ locals {
       env = {
         SOURCE_TYPE = "rss"
         SOURCE_ID = "the_guardian"
+        RSS_URL = "https://www.theguardian.com/world/rss"
       }
     }
   }
