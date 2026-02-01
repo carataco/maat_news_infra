@@ -6,6 +6,7 @@ locals {
         SOURCE_TYPE = "rss"
         SOURCE_ID = "bbc_news_int"
         RSS_URL = "https://feeds.bbci.co.uk/news/rss.xml?edition=int"
+        TARGET_TYPE = "s3"
       }
     }
 
@@ -15,6 +16,7 @@ locals {
         SOURCE_TYPE = "rss"
         SOURCE_ID = "the_guardian"
         RSS_URL = "https://www.theguardian.com/world/rss"
+        TARGET_TYPE = "s3"
       }
     }
   }
