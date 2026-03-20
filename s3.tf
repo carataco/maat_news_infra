@@ -15,3 +15,12 @@ resource "aws_s3_bucket" "ingestion_prod" {
     Env     = "prod"
   }
 }
+
+resource "aws_s3_bucket" "airflow_prod" {
+  bucket = "airflow-maat-news"
+
+  tags = {
+    Project = "Maat News"
+    Env     = "prod"
+  }
+}
