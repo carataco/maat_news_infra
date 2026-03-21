@@ -61,32 +61,3 @@ resource "aws_lambda_function" "this" {
     create_before_destroy = true
   }
 }
-
-# ============================
-# EventBridge Scheduled Rules
-# ============================
-resource "aws_cloudwatch_event_rule" "schedule" {
-  for_each = local.lambdas
-
-  name                = "${each.key}-schedule"
-  description         = "Run ${each.key} Lambda every 30 minutes"
-  schedule_expression = "rate(30 minutes)"  # runs every 30 min
-}
-
-resource "aws_cloudwatch_event_target" "lambda_target" {
-  for_each = local.lambdas
-
-  rule      = aws_cloudwatch_event_rule.schedule[each.key].name
-  target_id = each.key
-  arn       = aws_lambda_function.this[each.key].arn
-}
-
-resource "aws_lambda_permission" "allow_event" {
-  for_each = local.lambdas
-
-  statement_id  = "AllowExecutionFromEventBridge-${each.key}"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.this[each.key].function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.schedule[each.key].arn
-}
